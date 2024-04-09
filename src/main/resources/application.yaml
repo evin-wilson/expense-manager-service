@@ -6,3 +6,8 @@ database:
   username: sa
   password: password
   driver: org.h2.Driver
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
