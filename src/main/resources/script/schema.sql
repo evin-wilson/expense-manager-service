@@ -1,19 +1,21 @@
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(255),
+    password VARCHAR(255) NULL,
+    email VARCHAR(255) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS expense (
+CREATE TABLE IF NOT EXISTS transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    transaction_type VARCHAR(10) NOT NULL CHECK (transaction_type IN ('expense', 'income', 'transfer')),
+    transaction_type VARCHAR(10) NOT NULL CHECK (transaction_type IN ('EXPENSE', 'INCOME', 'transfer')),
     amount FLOAT NOT NULL ,
     account VARCHAR(20) NOT NULL,
     category VARCHAR(20) NOT NULL,
-    subCategory VARCHAR(20) NULL,
+    sub_category VARCHAR(20) NULL,
+    date TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     description VARCHAR(100) NULL
 );
 
