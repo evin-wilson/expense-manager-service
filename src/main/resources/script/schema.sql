@@ -9,12 +9,12 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    transaction_type VARCHAR(10) NOT NULL CHECK (transaction_type IN ('EXPENSE', 'INCOME', 'transfer')),
+    transaction_type VARCHAR(10) NOT NULL CHECK (transaction_type IN ('EXPENSE', 'INCOME', 'TRANSFER')),
     amount FLOAT NOT NULL ,
     account VARCHAR(20) NOT NULL,
     category VARCHAR(20) NOT NULL,
     sub_category VARCHAR(20) NULL,
-    date TIMESTAMP NOT NULL,
+    transaction_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     description VARCHAR(100) NULL
 );

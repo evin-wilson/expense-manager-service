@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,12 +30,12 @@ public class TransactionService {
         this.userRepo = userRepo;
     }
 
-    public List<TransactionRecord> getAllTransactions(String username, LocalDate date, TransactionType transactionType) {
+    public List<TransactionRecord> getAllTransactions(String username, Date date, TransactionType transactionType) {
         validateUser(username);
         if (transactionType != null) {
-            return transactionRepo.findByUsernameAndDateAndTransactionType(username, date, transactionType);
+            return transactionRepo.findByUsernameAndDateAndTransactionType(username, date, transactionType.name());
         }
-        return transactionRepo.findAllByUsernameAndDate(username, date);
+        return transactionRepo.findAllByUsernameAndTransactionAt(username, date);
     }
 
     public void addTransaction(String username, TransactionRecord transactionRecord) {

@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class TransactionController {
 
     @GetMapping( produces = APPLICATION_JSON_VALUE)
     public List<TransactionRecord> getAllTransactions(@PathVariable String username,
-                                                      @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+                                                      @RequestParam("date") Date date,
                                                       @RequestParam(required = false) TransactionType transactionType) {
         return transactionService.getAllTransactions(username, date, transactionType);
     }
