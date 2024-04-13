@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -27,7 +26,7 @@ public class TransactionRecord {
     private String username;
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
-    private float amount;
+    private Float amount;
     private String account;
     private String category;
     private String subCategory;
