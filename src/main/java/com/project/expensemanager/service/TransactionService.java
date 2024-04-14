@@ -37,9 +37,11 @@ public class TransactionService {
     public List<TransactionRecord> getAllTransactions(String username, Date date, TransactionType transactionType) {
         validateUser(username);
         if (transactionType != null) {
-            return transactionRepo.findByUsernameAndDateAndTransactionType(username, date, transactionType.name());
+            return transactionRepo.findByUsernameAndDateAndTransactionType(username, date, transactionType.name())
+                    .orElseThrow(()->new EntityNotFoundException("No transaction for the given date and tranction Type"));
         }
-        return transactionRepo.findAllByUsernameAndTransactionAt(username, date);
+        return transactionRepo.findAllByUsernameAndTransactionAt(username, date)
+                .orElseThrow(()->new EntityNotFoundException("No transaction for the given date"));
     }
 
     public void addTransaction(String username, TransactionRecord transactionRecord) {
@@ -72,9 +74,11 @@ public class TransactionService {
         List<TransactionRecord> transactionRecords;
         validateUser(username);
         if (month != null) {
-            transactionRecords = transactionRepo.findByUsernameAndYearAndMonth(username, year, month);
+            transactionRecords = transactionRepo.findByUsernameAndYearAndMonth(username, year, month)
+                    .orElseThrow(()->new EntityNotFoundException("No transaction done for given month"));
         } else {
-            transactionRecords = transactionRepo.findByUsernameAndYear(username, year);
+            transactionRecords = transactionRepo.findByUsernameAndYear(username, year)
+                    .orElseThrow(()->new EntityNotFoundException("No transaction done for given year"));
         }
         return generateSummary(transactionRecords);
     }
