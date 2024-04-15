@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -30,6 +31,6 @@ public class TransactionRecord {
     private String account;
     private String category;
     private String subCategory;
-    private Timestamp transactionAt;
+    private LocalDateTime transactionAt;
     private String description;
 }

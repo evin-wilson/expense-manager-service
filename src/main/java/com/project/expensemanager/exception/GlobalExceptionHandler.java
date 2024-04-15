@@ -14,6 +14,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         return ResponseEntity.status(NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body( String.format("{\"error\":\"%s\"}", e.getMessage()));
     }
 
