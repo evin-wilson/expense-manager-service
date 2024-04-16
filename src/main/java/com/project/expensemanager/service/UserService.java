@@ -6,6 +6,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,10 @@ import java.util.List;
 public class UserService {
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    AuthenticationManager authenticationManager;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public List<User> getUsers() {
         return userRepo.findAll();
@@ -22,11 +29,18 @@ public class UserService {
 
     public boolean registerNewUser(User user) {
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepo.save(user);
             return true;
         } catch (DataIntegrityViolationException e) {
             return false;
         }
+    }
+
+    public User authenticate(User input) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(input.getUsername(), input.getPassword()));
+        return userRepo.findByUsername(input.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User not found !"));
     }
 
     public User getUserByUsername(String username) {

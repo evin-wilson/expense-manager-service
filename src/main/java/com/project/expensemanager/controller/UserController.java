@@ -1,6 +1,7 @@
 package com.project.expensemanager.controller;
 
 import com.project.expensemanager.domain.User;
+import com.project.expensemanager.service.JwtService;
 import com.project.expensemanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    JwtService jwtService;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
@@ -38,6 +41,13 @@ public class UserController {
         } else {
             return ResponseEntity.status(BAD_REQUEST).body("{\"message\":\"Failed to register user\"}");
         }
+    }
+
+    @PostMapping(value = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> login(@RequestBody User user) {
+        User authenticatedUser = userService.authenticate(user);
+        String jwtToken = jwtService.generateToken(authenticatedUser);
+        return ResponseEntity.ok("{\"token\":" + jwtToken + "}");
     }
 
     @DeleteMapping(value = "/user", produces = APPLICATION_JSON_VALUE)

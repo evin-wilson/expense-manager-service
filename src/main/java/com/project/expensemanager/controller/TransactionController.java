@@ -1,5 +1,6 @@
 package com.project.expensemanager.controller;
 
+import com.project.expensemanager.domain.Summary;
 import com.project.expensemanager.domain.TransactionRecord;
 import com.project.expensemanager.domain.TransactionType;
 import com.project.expensemanager.service.TransactionService;
@@ -8,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -58,12 +57,11 @@ public class TransactionController {
     }
 
     @GetMapping(value = "/summary", produces = APPLICATION_JSON_VALUE)
-    public Map<TransactionType, BigDecimal> getTotalAmount(@PathVariable String username,
-                                                           @RequestParam(required = false) Short year,
-                                                           @RequestParam(required = false) Short month) {
-        if (year == null & month == null) {
+    public Summary getTotalAmount(@PathVariable String username,
+                                  @RequestParam Short year) {
+        if (year == null) {
             throw new IllegalArgumentException("At least year or month must be provided !");
         }
-        return transactionService.totalAmount(username, year, month);
+        return transactionService.totalAmount(username, year);
     }
 }
