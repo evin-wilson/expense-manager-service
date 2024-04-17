@@ -30,6 +30,7 @@ public class UserService {
     public boolean registerNewUser(User user) {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            log.info(user.getPassword());
             userRepo.save(user);
             return true;
         } catch (DataIntegrityViolationException e) {
@@ -37,7 +38,7 @@ public class UserService {
         }
     }
 
-    public User authenticate(User input) {
+    public User login(User input) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(input.getUsername(), input.getPassword()));
         return userRepo.findByUsername(input.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException("User not found !"));
@@ -51,5 +52,15 @@ public class UserService {
     public void deleteUser(String username) {
         getUserByUsername(username);
         userRepo.deleteByUsername(username);
+    }
+
+    public void encryptPasswordOnStartup(){
+        List<User> users = userRepo.findAll();
+        for (User user : users) {
+            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encryptedPassword);
+            userRepo.save(user);
+        }
+        log.info("all password in the startup script is encrypted");
     }
 }

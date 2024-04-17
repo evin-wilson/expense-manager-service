@@ -1,5 +1,6 @@
 package com.project.expensemanager.controller;
 
+import com.project.expensemanager.domain.JwtResponse;
 import com.project.expensemanager.domain.User;
 import com.project.expensemanager.service.JwtService;
 import com.project.expensemanager.service.UserService;
@@ -44,10 +45,11 @@ public class UserController {
     }
 
     @PostMapping(value = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> login(@RequestBody User user) {
-        User authenticatedUser = userService.authenticate(user);
+    public ResponseEntity<JwtResponse> login(@RequestBody User user) {
+        User authenticatedUser = userService.login(user);
         String jwtToken = jwtService.generateToken(authenticatedUser);
-        return ResponseEntity.ok("{\"token\":" + jwtToken + "}");
+        JwtResponse response = JwtResponse.builder().accessToken(jwtToken).build();
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping(value = "/user", produces = APPLICATION_JSON_VALUE)
